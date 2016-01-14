@@ -43,11 +43,11 @@ void RK (double* const y4, double* const y5, const double dx) { // dx = dt
   
   for (int i = 0; i<d; i++) k7[i] = y4[i] + 35.0/384 * dx * k1[i] + 500.0/1113 * dx * k3[i] + 125.0/192 * dx * k4[i] - 2187.0/6784 * dx * k5[i] + 11.0/84 * dx * k6[i];
   func(k7);
-  
-  for (int i = 0; i<d; i++) y4[i] = y4[i] + 5179.0/57600 * dx * k1[i] + 7571.0/16695 * dx * k3[i] + 393.0/640 * dx * k4[i] - 92097.0/339200 * dx *k5[i] + 187.0/2100 * dx * k6[i] + 1.0/40 * dx * k7[i];
-  
+    
   for (int i = 0; i<d; i++) y5[i] = y4[i] + 35.0/384 * dx * k1[i] + 500.0/1113 * dx * k3[i] + 125.0/192 * dx * k4[i] - 2187.0/6784 * dx * k5[i] + 11.0/84 * dx * k6[i];
   
+  for (int i = 0; i<d; i++) y4[i] = y4[i] + 5179.0/57600 * dx * k1[i] + 7571.0/16695 * dx * k3[i] + 393.0/640 * dx * k4[i] - 92097.0/339200 * dx *k5[i] + 187.0/2100 * dx * k6[i] + 1.0/40 * dx * k7[i];
+
 }
 
 double error ( double* y4, double* y5) {
@@ -55,19 +55,19 @@ double error ( double* y4, double* y5) {
 }
 
 int main() {
-  double dt = 1e-5;
-  const double Tol = 1e-5;
+  double dt = 1e-9;
+  const double Tol = 1e-12;
   double Xi;
   double y4[4] = {0.994, 0, 0, -2.00158510637908};
   double y5[4] = {0.994, 0, 0, -2.00158510637908};
   
   ofstream out ( "sol" );
   double t;
-  for ( t = 0.0; t<30; t += dt) {
+  for ( t = 0.0; t<75; t += dt) {
     out << t << "\t" << dt << "\t" << y4[0]  << "\t" << y4[2] << endl;
     RK ( y4, y5, dt );
     Xi = error (y4, y5);
-    dt *= 0.9 * pow( Tol/Xi, 1.0/5 );
+    dt *= 0.3 * pow( Tol/Xi, 1.0/5 );
   }
   out << t << "\t" << dt << "\t" << y4[0]  << "\t" << y4[2] << endl;
   out.close();
